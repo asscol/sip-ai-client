@@ -1,0 +1,78 @@
+# ============================================
+# SIP AI Client — Конфигурация
+# ============================================
+# Скопируйте этот файл в config.yaml и заполните
+
+# --- Провайдер LLM ---
+# "ollama" — локальная модель через Ollama
+# "openai" / "cloud_api" — облачный API (OpenAI, совместимые)
+llm_provider: "ollama"
+
+# --- SIP подключение ---
+sip:
+  server: "127.0.0.1"          # Адрес SIP-сервера (Asterisk, FreeSWITCH, etc.)
+  port: 5060                    # Порт SIP-сервера
+  username: "1001"              # SIP-аккаунт
+  password: "secret"            # Пароль SIP-аккаунта
+  transport: "udp"              # Транспорт: udp / tcp
+  display_name: "SIP AI Client"
+
+# --- Whisper (распознавание речи) ---
+whisper:
+  model_size: "large-v3"        # tiny, base, small, medium, large-v3
+  language: "ru"                # Язык распознавания
+  device: "cpu"                 # cpu / cuda / auto
+  compute_type: "int8"          # float16, int8, int8_float16
+  beam_size: 5
+  vad_filter: true              # Фильтр голосовой активности
+  vad_min_silence_duration_ms: 500
+
+# --- Piper TTS (синтез речи) ---
+piper:
+  voice: "ru_RU-ruslan-medium"  # Голос Ruslan (русский)
+  # model_path: null            # Путь к ONNX модели (если скачана вручную)
+  data_dir: "~/.local/share/piper-voices"
+  length_scale: 1.0             # Скорость речи (1.0 = нормальная)
+  noise_scale: 0.667
+  noise_w: 0.8
+  sentence_silence: 0.2
+  sample_rate: 22050            # Частота модели Piper
+  output_sample_rate: 8000      # Частота для SIP (G.711)
+
+# --- Ollama (локальные LLM) ---
+ollama:
+  host: "http://localhost:11434"
+  model: "llama3.1:70b"         # Модель >19B параметров
+  temperature: 0.7
+  top_p: 0.9
+  max_tokens: 512
+  context_window: 8192
+  system_prompt: >
+    Ты — голосовой ИИ-ассистент. Отвечай кратко, по-русски.
+    Ты общаешься по телефону, поэтому отвечай лаконично и понятно.
+
+# --- Cloud API (облачные LLM) ---
+cloud_api:
+  provider: "openai"            # openai, или любой совместимый API
+  api_key: ""                   # Ваш API ключ
+  api_base: null                # URL API (null = стандартный OpenAI)
+  model: "gpt-4o"
+  temperature: 0.7
+  max_tokens: 512
+  system_prompt: >
+    Ты — голосовой ИИ-ассистент. Отвечай кратко, по-русски.
+    Ты общаешься по телефону, поэтому отвечай лаконично и понятно.
+
+# --- Аудио ---
+audio:
+  sample_rate: 8000             # Частота дискретизации SIP
+  channels: 1
+  sample_width: 2
+  chunk_size: 160               # Размер аудио-фрейма (20мс при 8kHz)
+  silence_threshold: 500.0      # Порог тишины (RMS)
+  silence_duration: 1.5         # Пауза для завершения речи (сек)
+  max_record_seconds: 30        # Максимальная длина записи
+  codec: "PCMU"                 # G.711 μ-law
+
+# --- Логирование ---
+log_level: "INFO"               # DEBUG, INFO, WARNING, ERROR
