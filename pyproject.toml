@@ -1,0 +1,49 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "sip-ai-client"
+version = "0.1.0"
+description = "SIP AI Client — голосовой ИИ-ассистент с Whisper STT, Piper TTS (Ruslan), Ollama/Cloud LLM"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.10"
+authors = [
+    { name = "Alex", email = "asscol43@gmail.com" },
+]
+
+dependencies = [
+    "pyVoIP>=2.0.0a3",
+    "faster-whisper>=1.0.0",
+    "piper-tts>=1.2.0",
+    "ollama>=0.3.0",
+    "openai>=1.0.0",
+    "httpx>=0.27.0",
+    "pyyaml>=6.0",
+    "numpy>=1.26.0",
+    "soundfile>=0.12.0",
+    "pydantic>=2.0.0",
+    "pydantic-settings>=2.0.0",
+    "loguru>=0.7.0",
+    "click>=8.1.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "ruff>=0.5.0",
+]
+
+[project.scripts]
+sip-ai-client = "sip_ai_client.main:main"
+
+[tool.ruff]
+target-version = "py310"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/sip_ai_client"]

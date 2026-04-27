@@ -1,0 +1,39 @@
+version: "3.8"
+
+services:
+  sip-ai-client:
+    build: .
+    container_name: sip-ai-client
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - ./config.yaml:/app/config.yaml:ro
+      - ./logs:/app/logs
+      - piper-voices:/root/.local/share/piper-voices
+      - whisper-models:/root/.cache/huggingface
+    environment:
+      - SIP_AI_LLM_PROVIDER=${LLM_PROVIDER:-ollama}
+      - SIP_AI_CLOUD_API__API_KEY=${CLOUD_API_KEY:-}
+    depends_on:
+      - ollama
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    restart: unless-stopped
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama-data:/root/.ollama
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+
+volumes:
+  piper-voices:
+  whisper-models:
+  ollama-data:
