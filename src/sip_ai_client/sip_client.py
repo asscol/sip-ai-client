@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import threading
-import time
 from typing import Optional, Protocol
 
 from loguru import logger
@@ -13,7 +12,7 @@ from sip_ai_client.audio.processor import (
     pcm16_to_ulaw,
     ulaw_to_pcm16,
 )
-from sip_ai_client.config import AppConfig, AudioConfig, LLMProvider, SIPConfig
+from sip_ai_client.config import AppConfig, AudioConfig
 
 
 class STTEngine(Protocol):
@@ -169,7 +168,7 @@ class SIPClient:
 
     def start(self) -> None:
         """Запустить SIP-клиент и подключиться к серверу."""
-        from pyVoIP.VoIP import VoIPPhone, CallState, PhoneStatus
+        from pyVoIP.VoIP import VoIPPhone
 
         sip = self.config.sip
 

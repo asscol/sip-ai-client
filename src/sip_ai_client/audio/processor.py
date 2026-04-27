@@ -8,7 +8,6 @@ import wave
 from typing import Optional
 
 import numpy as np
-from loguru import logger
 
 from sip_ai_client.config import AudioConfig
 

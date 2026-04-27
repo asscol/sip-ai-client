@@ -90,7 +90,8 @@ class OllamaLLM:
         """Обрезать историю диалога, сохраняя системный промпт."""
         if len(self._conversation_history) > max_messages:
             system_msg = self._conversation_history[0]
-            self._conversation_history = [system_msg] + self._conversation_history[-(max_messages - 1):]
+            recent = self._conversation_history[-(max_messages - 1):]
+            self._conversation_history = [system_msg] + recent
 
     def reset_conversation(self) -> None:
         """Сбросить историю диалога."""

@@ -2,10 +2,8 @@
 
 from __future__ import annotations
 
-import io
 from typing import Optional
 
-import numpy as np
 from loguru import logger
 
 from sip_ai_client.audio.processor import pcm16_to_float32, resample
